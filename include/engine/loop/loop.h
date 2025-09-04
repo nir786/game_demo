@@ -1,4 +1,9 @@
 #pragma once
+#include "../../../imgui/backends/imgui_impl_glfw.h"
+#include "../../../imgui/backends/imgui_impl_opengl3.h"
+#include "../../../imgui/imgui.h"
+
+#include "../../engine/render/loadImage.h"
 #include "../window/window.h"
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -24,7 +29,4 @@ private:
   void time_helper(cl::time_point &last, cl::time_point &now);
 
   void start();
-  void update();
-  void timedUpdate();
-  void lateUpdate();
 };
