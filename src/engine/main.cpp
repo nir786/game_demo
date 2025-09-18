@@ -13,6 +13,5 @@ int main() {
   auto &loop = GameLoop::getInstance();
 
   loop.run();
-
   return 0;
 }

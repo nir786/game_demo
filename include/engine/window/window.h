@@ -1,4 +1,10 @@
 #pragma once
+#include <glm/ext/matrix_float4x4.hpp>
+#include <glm/ext/vector_float2.hpp>
+#include <glm/ext/vector_float4.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "../../glad/glad.h"
 #include <GLFW/glfw3.h>
@@ -15,6 +21,18 @@ public:
 
     return instance;
   }
+  void framebuffer_call_back(GLFWwindow *, int ww, int hh) {
+    auto &self = GameWindow::getInstance();
+    std::cout << "projection call" << std::endl;
+    self.width = ww;
+    self.height = hh;
+    glViewport(0, 0, ww, hh);
+
+    float aspect = (float)self.width / (float)self.height;
+    float aspectw = (float)self.height / (float)self.width;
+    self.projection = glm::ortho(0.0f, (float)self.width, (float)self.height,
+                                 0.0f, -1.0f, 1.0f);
+  }
 
   GLFWwindow *getWindow();
   int getHeight();
@@ -22,6 +40,7 @@ public:
   void setCallBack();
   bool isOpen() const;
   void setWindow(bool v);
+  glm::mat4 getProjection() { return this->projection; }
 
 private:
   GameWindow(int w, int h, const string &title) {
@@ -42,11 +61,16 @@ private:
 
     glfwSetFramebufferSizeCallback(window, [](GLFWwindow *, int ww, int hh) {
       auto &self = GameWindow::getInstance();
+      std::cout << "projection call" << std::endl;
       self.width = ww;
       self.height = hh;
       glViewport(0, 0, ww, hh);
-    });
 
+      float aspect = (float)self.width / (float)self.height;
+      float aspectw = (float)self.height / (float)self.width;
+      self.projection = glm::ortho(0.0f, (float)self.width, (float)self.height,
+                                   0.0f, -1.0f, 1.0f);
+    });
     width = w;
     height = h;
     glfwGetFramebufferSize(window, &width, &height);
@@ -58,7 +82,8 @@ private:
     glfwDestroyWindow(window);
     glfwTerminate();
   };
-
+  glm::vec2 clip;
   GLFWwindow *window;
   int width, height;
+  glm::mat4 projection;
 };
